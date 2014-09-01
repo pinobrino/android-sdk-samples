@@ -1,0 +1,12 @@
+<resources>
+
+	<string name="app_name">Snapback Plugin for Atooma</string>
+    <string name="module_name">Snapback</string>
+    <string name="tr_sensor_name">Gesture and Blow</string>
+
+    <string name="pe_torch_name">Torch I/O</string>
+    
+    <string name="cc_blow_name">Blow</string>
+    <string name="cc_snap_name">Snap</string>
+
+</resources>

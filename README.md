@@ -10,6 +10,7 @@ Usually a project called *appcompat_v7* should be already in your workspace if y
 Third, add Google Play Services dependency where required (see http://developer.android.com/google/play-services/setup.html).
 If you are using Android Studio, you have to edit your app/build.gradle adding in dependecies section the followings:
 
+@code{.java}
 dependencies {
 	compile fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -22,4 +23,5 @@ dependencies {
 	# Google Analytics
 	compile 'com.google.android.gms:play-services:6.5.87';
 }
+@endcode
 

@@ -12,7 +12,7 @@ If you are using Android Studio, you have to edit your app/build.gradle adding i
 
 ``` java
 dependencies {
-	compile fileTree(dir: 'libs', include: ['\*.jar'])
+	compile fileTree(dir: 'libs', include: ['*.jar'])
 
 	# our SDK
 	compile files ('/libs/snapback-android-sdk-current-0.3.jar');

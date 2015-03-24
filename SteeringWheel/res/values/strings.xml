@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SteeringWheel</string>
+    <string name="msgIncl">Steering degree:</string>
+    <string name="msgTouch">Touch event:</string>
+    
+
+    <string name="action_settings">Settings</string>
+    
+</resources>

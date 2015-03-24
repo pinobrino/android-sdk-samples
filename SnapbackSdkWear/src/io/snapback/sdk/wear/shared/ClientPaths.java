@@ -1,3 +1,11 @@
+/**
+ * @file ClientPaths.java
+ * @brief Constants class.
+ * @author Snapback, Moreno De Vincenzi
+ * @version 0.5
+ * @date 2015-03-19
+ */
+
 package io.snapback.sdk.wear.shared;
 
 public class ClientPaths {

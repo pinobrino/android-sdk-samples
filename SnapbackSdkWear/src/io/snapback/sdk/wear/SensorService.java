@@ -178,7 +178,7 @@ public class SensorService extends Service implements SensorEventListener {
     		stringType = sensorStringTypes.getStringType(event.sensor.getType());
     	}
     	
-        client.sendSensorData(event.sensor.getType(), stringType, reportingMode, event.accuracy, event.timestamp, event.values, wakeUp);
+        client.sendSensorData(event.sensor.getType(), stringType, reportingMode, event.accuracy, event.timestamp, event.values, wakeUp, event.sensor.getName(), event.sensor.getVendor(), event.sensor.getVersion(), event.sensor.getPower());
     }
 
 
@@ -206,7 +206,7 @@ public class SensorService extends Service implements SensorEventListener {
 	    	}
 	    	
 	    	requestedTriggers.remove(Util.getIdForSensor(event.sensor.getType(), wakeUp));
-	    	client.sendTriggerData(event.sensor.getType(), stringType, reportingMode, event.timestamp, event.values, wakeUp);
+	    	client.sendTriggerData(event.sensor.getType(), stringType, reportingMode, event.timestamp, event.values, wakeUp, event.sensor.getName(), event.sensor.getVendor(), event.sensor.getVersion(), event.sensor.getPower());
 		}
     }
 }

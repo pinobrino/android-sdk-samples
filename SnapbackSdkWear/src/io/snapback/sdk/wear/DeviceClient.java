@@ -37,6 +37,10 @@ public class DeviceClient {
 	private ArrayList<String> sensorStringTypeList;
 	private ArrayList<String> reportingModeList;
 	private ArrayList<String> sensorWakeUpList;
+	private ArrayList<String> sensorNameList;
+	private ArrayList<String> sensorVendorList;
+	private ArrayList<Integer> sensorVersionList;
+	private ArrayList<String> sensorPowerList;
 
 	public static DeviceClient getInstance(Context context) {
 		if (instance == null) {
@@ -68,6 +72,10 @@ public class DeviceClient {
 		sensorStringTypeList = new ArrayList<String>();
 		reportingModeList = new ArrayList<String>();
 		sensorWakeUpList = new ArrayList<String>();
+		sensorNameList = new ArrayList<String>();
+		sensorVendorList = new ArrayList<String>();
+		sensorVersionList = new ArrayList<Integer>();
+		sensorPowerList = new ArrayList<String>();
 		
 		List<Sensor> list = sensorManager.getSensorList(Sensor.TYPE_ALL);
 		
@@ -106,6 +114,11 @@ public class DeviceClient {
 			sensorWakeUpList.add(null);
 			sensorIdList.add(Util.getIdForSensor(s.getType(), (String)null));
 		}
+		
+		sensorNameList.add(s.getName());
+		sensorVendorList.add(s.getVendor());
+		sensorVersionList.add(s.getVersion());
+		sensorPowerList.add(String.valueOf(s.getPower()));
 	}
 	
 	private void sendSensorsListInBackground() {
@@ -120,6 +133,10 @@ public class DeviceClient {
 		dataMap.getDataMap().putStringArrayList(DataMapKeys.SENSOR_REPORTING_MODE_LIST, reportingModeList);
 		dataMap.getDataMap().putStringArrayList(DataMapKeys.SENSOR_STRING_TYPE_LIST, sensorStringTypeList);
 		dataMap.getDataMap().putStringArrayList(DataMapKeys.SENSOR_WAKEUP_LIST, sensorWakeUpList);
+		dataMap.getDataMap().putStringArrayList(DataMapKeys.SENSOR_NAME_LIST, sensorNameList);
+		dataMap.getDataMap().putStringArrayList(DataMapKeys.SENSOR_VENDOR_LIST, sensorVendorList);
+		dataMap.getDataMap().putIntegerArrayList(DataMapKeys.SENSOR_VERSION_LIST, sensorVersionList);
+		dataMap.getDataMap().putStringArrayList(DataMapKeys.SENSOR_POWER_LIST, sensorPowerList);
 		
 		PutDataRequest putDataRequest = dataMap.asPutDataRequest();
 		
@@ -137,24 +154,30 @@ public class DeviceClient {
 		}
 	}
 
-	public void sendSensorData(final int sensorType, final String stringType, final String reportingMode,final int accuracy, final long timestamp, final float[] values, final String wakeUp) {
+	public void sendSensorData(final int sensorType, final String stringType, final String reportingMode,final int accuracy, final long timestamp, final float[] values, final String wakeUp, final String name, final String vendor, final int version, final float power) {
 		executorService.submit(new Runnable() {
 			@Override
 			public void run() {
-				sendSensorDataInBackground(sensorType, stringType, reportingMode, accuracy, timestamp, values, wakeUp);
+				sendSensorDataInBackground(sensorType, stringType, reportingMode, accuracy, timestamp, values, wakeUp, name, vendor, version, power);
 			}
 		});
 	}
 
-	private void sendSensorDataInBackground(int sensorType, String stringType, String reportingMode, int accuracy, long timestamp, float[] values, String wakeUp) {
+	private void sendSensorDataInBackground(int sensorType, String stringType, String reportingMode, int accuracy, long timestamp, float[] values, String wakeUp, String name, String vendor, int version, float power) {
 		PutDataMapRequest dataMap = PutDataMapRequest.create("/sensors/" + sensorType);
 
 		dataMap.getDataMap().putString(DataMapKeys.STRING_TYPE, stringType);
 		dataMap.getDataMap().putString(DataMapKeys.REPORTING_MODE, reportingMode);
+		
 		dataMap.getDataMap().putInt(DataMapKeys.ACCURACY, accuracy);
 		dataMap.getDataMap().putLong(DataMapKeys.TIMESTAMP, timestamp);
 		dataMap.getDataMap().putFloatArray(DataMapKeys.VALUES, values);
 		dataMap.getDataMap().putString(DataMapKeys.WAKEUP, wakeUp);
+		
+		dataMap.getDataMap().putString(DataMapKeys.NAME, name);
+		dataMap.getDataMap().putString(DataMapKeys.VENDOR, vendor);
+		dataMap.getDataMap().putInt(DataMapKeys.VERSION, version);
+		dataMap.getDataMap().putFloat(DataMapKeys.POWER, power);
 		
 		PutDataRequest putDataRequest = dataMap.asPutDataRequest();
 		
@@ -171,23 +194,29 @@ public class DeviceClient {
 		}
 	}
 	
-	public void sendTriggerData(final int sensorType, final String stringType, final  String reportingMode, final long timestamp, final float[] values, final String wakeUp) {
+	public void sendTriggerData(final int sensorType, final String stringType, final  String reportingMode, final long timestamp, final float[] values, final String wakeUp, final String name, final String vendor, final int version, final float power) {
 		executorService.submit(new Runnable() {
 			@Override
 			public void run() {
-				sendTriggerDataInBackground(sensorType, stringType, reportingMode, timestamp, values, wakeUp);
+				sendTriggerDataInBackground(sensorType, stringType, reportingMode, timestamp, values, wakeUp, name, vendor, version, power);
 			}
 		});
 	}
 	
-	private void sendTriggerDataInBackground(final int sensorType, String stringType, String reportingMode, long timestamp, float[] values, final String wakeUp) {
+	private void sendTriggerDataInBackground(final int sensorType, String stringType, String reportingMode, long timestamp, float[] values, final String wakeUp, String name, String vendor, int version, float power) {
 		PutDataMapRequest dataMap = PutDataMapRequest.create("/triggers/" + sensorType);
 
 		dataMap.getDataMap().putString(DataMapKeys.STRING_TYPE, stringType);
 		dataMap.getDataMap().putString(DataMapKeys.REPORTING_MODE, reportingMode);
+		
 		dataMap.getDataMap().putLong(DataMapKeys.TIMESTAMP, timestamp);
 		dataMap.getDataMap().putFloatArray(DataMapKeys.VALUES, values);
 		dataMap.getDataMap().putString(DataMapKeys.WAKEUP, wakeUp);
+		
+		dataMap.getDataMap().putString(DataMapKeys.NAME, name);
+		dataMap.getDataMap().putString(DataMapKeys.VENDOR, vendor);
+		dataMap.getDataMap().putInt(DataMapKeys.VERSION, version);
+		dataMap.getDataMap().putFloat(DataMapKeys.POWER, power);
 		
 		PutDataRequest putDataRequest = dataMap.asPutDataRequest();
 		

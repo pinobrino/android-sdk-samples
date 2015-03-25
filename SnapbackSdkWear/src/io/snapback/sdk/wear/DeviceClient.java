@@ -247,4 +247,38 @@ public class DeviceClient {
 
 		return result.isSuccess();
 	}
+
+	public void sendDeviceName(final String deviceName) {
+		executorService.submit(new Runnable() {
+			@Override
+			public void run() {
+				sendDeviceNameInBackground(deviceName);
+			}
+		});
+	}
+	
+	private void sendDeviceNameInBackground(String deviceName) {
+		PutDataMapRequest dataMap = PutDataMapRequest.create("/device");
+		
+		// onDataChanged() gets only called when the data really changes
+		// make sure that the method gets called once for each write operation
+		dataMap.getDataMap().putLong(DataMapKeys.TIMESTAMP, System.currentTimeMillis());
+		
+		dataMap.getDataMap().putString(DataMapKeys.DEVICE_NAME, deviceName);
+		
+		PutDataRequest putDataRequest = dataMap.asPutDataRequest();
+		
+		Log.d(TAG, "Trying to send sensors list (" + sensorIdList.size() + ")...");
+		if(validateConnection()) {
+			Wearable.DataApi.putDataItem(googleApiClient, putDataRequest).setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
+				@Override
+				public void onResult(DataApi.DataItemResult dataItemResult) {
+					Log.d(TAG, "Sending device name: " + dataItemResult.getStatus().isSuccess());
+				}
+			});
+		}
+		else {
+			Log.d(TAG, "Disconnected");
+		}
+	}
 }

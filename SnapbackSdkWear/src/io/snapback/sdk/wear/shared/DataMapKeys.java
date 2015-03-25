@@ -9,6 +9,9 @@
 package io.snapback.sdk.wear.shared;
 
 public class DataMapKeys {
+	
+	public static final String DEVICE_NAME = "device-name";
+	
 	public static final String STRING_TYPE = "string-type";
 	public static final String REPORTING_MODE = "reporting-mode";
     public static final String ACCURACY = "accuracy";

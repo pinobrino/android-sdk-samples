@@ -14,4 +14,5 @@ public class ClientPaths {
     public static final String SENSORS_LIST = "/list";
     public static final String START_TRIGGER_MEASUREMENT = "/trigger_start";
     public static final String STOP_TRIGGER_MEASUREMENT = "/trigger_stop";
+    public static final String DEVICE_NAME = "/device_name";
 }

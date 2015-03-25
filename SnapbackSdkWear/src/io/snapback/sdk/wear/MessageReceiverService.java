@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.util.Log;
 
 import com.google.android.gms.wearable.MessageEvent;
@@ -57,6 +58,20 @@ public class MessageReceiverService extends WearableListenerService {
 		registerReceiver(receiver, filter);
 	}
 	
+	private String getDeviceName() {
+		String manufacturer = Build.MANUFACTURER;
+		String model = Build.MODEL;
+
+		if (model.startsWith(manufacturer))
+		{
+			return Util.capitalize(model);
+		}
+		else
+		{
+			return Util.capitalize(manufacturer) + " " + model;
+		}
+	}
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -70,6 +85,10 @@ public class MessageReceiverService extends WearableListenerService {
 		String path = messageEvent.getPath();
 		
 		Log.d(TAG, "Received message: " + path);
+		
+		if(path.equals(ClientPaths.DEVICE_NAME)) {
+			deviceClient.sendDeviceName(getDeviceName());
+		}
 
 		if (path.equals(ClientPaths.SENSORS_LIST)) {
 			deviceClient.sendSensorsList(sensorManager);

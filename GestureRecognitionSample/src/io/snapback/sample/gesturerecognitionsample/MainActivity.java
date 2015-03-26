@@ -16,6 +16,8 @@ import java.text.DecimalFormat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -81,7 +83,7 @@ public class MainActivity extends Activity implements GestureEventListener {
 			if(baseGestureSer != null) {
 				detector.setBaseGestureSerialized(baseGestureSer);
 				baseGesture = new GestureSignal(baseGestureSer);
-				txt.setText("Base gesture loaded");
+				txt.setText("Base gesture loaded\n(duration: " + ((double)baseGesture.getDurationMillis() / 1000d) + " s)");
 				bt.setEnabled(true);
 			}
 		}
@@ -135,7 +137,7 @@ public class MainActivity extends Activity implements GestureEventListener {
 					if(baseGestureSer != null) {
 						detector.setBaseGestureSerialized(baseGestureSer);
 						baseGesture = new GestureSignal(baseGestureSer);
-						txt.setText("Base gesture recorded");
+						txt.setText("Base gesture recorded\n(duration: " + ((double)baseGesture.getDurationMillis() / 1000d) + " s)");
 						bt.setEnabled(true);
 					}
 					else {
@@ -190,11 +192,16 @@ public class MainActivity extends Activity implements GestureEventListener {
 		
 		if(gestureEventType.equals(GestureEventType.GESTURE_MATCH)) {
 			v.vibrate(1000);
-			txt.setText("Gestures match!\nSimilarity: " + df.format(gestureEvent.getSimilarity()) + "%");
+			txt.setText("Gestures match!\nSimilarity: " + df.format(gestureEvent.getSimilarity()) + "%\n(duration: " + ((double)gestureEvent.getDurationMillis() / 1000d) + " s)");
+			ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+			toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 150);
+			toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 150);
 		}
 		else if(gestureEventType.equals(GestureEventType.GESTURE_MISMATCH)) {
 			v.vibrate(250);
-			txt.setText("Gestures NOT match!\nSimilarity: " + df.format(gestureEvent.getSimilarity()) + "%");
+			txt.setText("Gestures NOT match!\nSimilarity: " + df.format(gestureEvent.getSimilarity()) + "%\n(duration: " + ((double)gestureEvent.getDurationMillis() / 1000d) + " s)");
+			ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+			toneG.startTone(ToneGenerator.TONE_SUP_ERROR, 500);
 		}
 		
 	}
